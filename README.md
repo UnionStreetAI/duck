@@ -16,7 +16,7 @@ Use Duck as an AI pre-commit hook, a lightweight Husky alternative, or a guardra
 
 ## Install
 
-From npm, once published:
+From npm:
 
 ```bash
 npm install --save-dev @unionstreet/duck
