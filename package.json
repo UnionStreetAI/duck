@@ -1,0 +1,60 @@
+{
+  "name": "@unionstreet/duck",
+  "version": "0.1.0",
+  "description": "AI-powered pre-commit hooks for repo-specific code quality guardrails.",
+  "main": "dist/index.js",
+  "bin": {
+    "duck": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "test": "vitest run src",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "npm run check && npm test && npm run build"
+  },
+  "keywords": [
+    "ai",
+    "pre-commit",
+    "git-hooks",
+    "husky",
+    "code-review",
+    "llm",
+    "openai",
+    "guardrails",
+    "developer-tools"
+  ],
+  "author": "Max Sonderby",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UnionStreetAI/duck.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UnionStreetAI/duck/issues"
+  },
+  "homepage": "https://github.com/UnionStreetAI/duck#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^2.0.41",
+    "ai": "^6.0.168",
+    "commander": "^14.0.3",
+    "yaml": "^2.8.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}
