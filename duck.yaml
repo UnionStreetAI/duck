@@ -1,0 +1,6 @@
+provider:
+  type: claude
+
+rules:
+  - id: no-agent-slop
+    prompt: "Fail if staged changes include TODO placeholders, fake tests, invented APIs, or unrelated rewrites."
