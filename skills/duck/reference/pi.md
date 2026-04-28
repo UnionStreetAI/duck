@@ -1,25 +1,25 @@
 # Pi
 
-Duck does not currently ship a `pi` provider. Pi support is included here as a reference target only because the CLI ecosystem around “Pi” is less standardized than Claude, Codex, Droid, Amp, or OpenCode.
+Use Duck's generic `headless-cli` provider with `scripts/pi.yaml` to run Pi through print mode.
 
-Starting points:
+Source docs:
 
-- https://github.com/badlogic/pi-mono
+- https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/README.md
 - https://www.npmjs.com/package/@mariozechner/pi-coding-agent
 
-Suggested approach:
+Useful patterns:
 
-1. Confirm which Pi CLI your team actually uses.
-2. Find its one-shot or query mode.
-3. Verify whether it can print machine-readable JSON.
-4. Add a thin wrapper that normalizes output to Duck’s report schema.
+```bash
+pi --print "Review the staged diff and return only JSON."
+```
 
-Things to look for in the chosen CLI:
+```bash
+pi --print --mode json "Review the staged diff and return only JSON."
+```
 
-- a non-interactive prompt flag
-- stdin support
-- JSON or JSONL output
-- a way to pin model/provider
-- a way to constrain tool permissions
+Notes:
 
-Because “Pi” is ambiguous today, treat this file as a checklist rather than a canonical invocation recipe.
+- `pi --print` / `pi -p` is the one-shot mode.
+- `--mode json` emits JSONL events.
+- Print mode can merge piped stdin with the prompt argument.
+- Restrict available tools with `--tools`, `--no-tools`, or `--no-builtin-tools`; for read-only checks, use read-only tools such as `read,grep,find,ls`.

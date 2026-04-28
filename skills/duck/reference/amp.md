@@ -27,4 +27,4 @@ Notes:
 - `--stream-json` gives line-delimited structured events when you need machine parsing.
 - For non-interactive environments, authenticate with environment variables rather than relying on the interactive login flow.
 
-If you wrap Amp for Duck, ask for strict JSON with no prose and reject anything outside the expected schema.
+`scripts/amp.yaml` asks Amp for strict Duck report JSON with no prose so Duck can parse the result.

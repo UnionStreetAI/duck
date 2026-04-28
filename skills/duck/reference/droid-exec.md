@@ -24,4 +24,4 @@ Notes:
 - `--output-format stream-json` is useful if you want event streams instead of a single final result.
 - `--cwd` is useful in monorepos or CI.
 
-If you wrap `droid exec` for Duck, prompt it to emit the Duck report schema exactly and fail hard on malformed JSON.
+`scripts/factory-droid.yaml` prompts Droid to emit Duck report JSON and uses `--output-format json` so Duck can parse the final result.

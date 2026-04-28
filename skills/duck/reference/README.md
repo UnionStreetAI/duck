@@ -1,14 +1,15 @@
 # Headless agent CLI references
 
-These files are reference notes for adapting additional agent CLIs into Duck-like review workflows.
+These files document one-shot agent CLI invocation patterns for Duck's generic `headless-cli` provider.
 
-Duck runtime support today is limited to:
+Duck runtime provider types include:
 
 - `openai-compatible`
 - `claude`
 - `codex`
+- `headless-cli`
 
-The files in this directory document headless invocation patterns for:
+Headless CLI examples are available for:
 
 - Factory Droid
 - Amp
@@ -17,4 +18,4 @@ The files in this directory document headless invocation patterns for:
 - OpenClaw
 - Hermes Agent
 
-Use them when building wrapper scripts, CI jobs, or future provider adapters that must emit Duck’s strict pass/fail JSON contract.
+Each referenced CLI still needs to be installed and authenticated outside Duck.
