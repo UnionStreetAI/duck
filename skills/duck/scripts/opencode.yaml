@@ -1,0 +1,14 @@
+provider:
+  type: headless-cli
+  name: opencode
+  command: opencode
+  args:
+    - run
+    - --format
+    - json
+    - "{prompt}"
+  promptMode: argument
+
+rules:
+  - id: no-agent-slop
+    prompt: "Fail if staged changes include TODO placeholders, fake tests, invented APIs, or unrelated rewrites."

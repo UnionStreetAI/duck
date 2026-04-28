@@ -1,0 +1,15 @@
+provider:
+  type: headless-cli
+  name: factory-droid
+  command: droid
+  args:
+    - exec
+    - --output-format
+    - json
+    - --cwd
+    - "{cwd}"
+  promptMode: stdin
+
+rules:
+  - id: no-agent-slop
+    prompt: "Fail if staged changes include TODO placeholders, fake tests, invented APIs, or unrelated rewrites."

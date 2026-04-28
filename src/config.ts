@@ -24,6 +24,13 @@ const ProviderSchema = z.discriminatedUnion("type", [
       .enum(["read-only", "workspace-write", "danger-full-access"])
       .default("read-only"),
   }),
+  z.object({
+    type: z.literal("headless-cli"),
+    name: z.string().min(1).optional(),
+    command: z.string().min(1),
+    args: z.array(z.string()).default([]),
+    promptMode: z.enum(["stdin", "argument"]).default("stdin"),
+  }),
 ]);
 
 const RuleSchema = z.object({

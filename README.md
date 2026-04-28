@@ -147,6 +147,8 @@ duck check --json
 
 Duck ships a minimal skills.sh-compatible agent skill at `skills/duck/SKILL.md`. `duck init` and `duck install` copy it into `.skills/duck` so agents can discover how to configure Duck and reference example configs in `.skills/duck/scripts`.
 
+The bundled skill also includes `reference/` notes for additional headless agent CLIs such as Factory Droid (`droid exec`), Amp, OpenCode, Pi, OpenClaw, and Hermes Agent. These are reference mappings for wrapper scripts and future adapters, not native Duck runtime providers yet.
+
 You can also install only the skill from GitHub with:
 
 ```bash

@@ -1,0 +1,11 @@
+provider:
+  type: headless-cli
+  name: amp
+  command: amp
+  args:
+    - --execute
+  promptMode: argument
+
+rules:
+  - id: no-agent-slop
+    prompt: "Fail if staged changes include TODO placeholders, fake tests, invented APIs, or unrelated rewrites."
