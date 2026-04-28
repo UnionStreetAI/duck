@@ -2,7 +2,7 @@
 
 **AI-powered pre-commit hooks for repo-specific code quality guardrails.**
 
-Duck is a tiny CLI that checks your staged git diff with an OpenAI-compatible model, Claude Code, or Codex CLI before commit. Define the rules you care about in `duck.yaml`, then Duck returns a simple pass/fail report with the exact prompt, reason, and location.
+Duck is a tiny CLI that checks your staged git diff with an OpenAI-compatible model, Claude Code, Codex CLI, or another headless agent CLI before commit. Define the rules you care about in `duck.yaml`, then Duck returns a simple pass/fail report with the exact prompt, reason, and location.
 
 Use Duck as an AI pre-commit hook, a lightweight Husky alternative, or a guardrail for AI coding agents that sometimes add TODOs, fake tests, invented APIs, unrelated rewrites, or other repo-specific slop.
 
@@ -10,7 +10,7 @@ Use Duck as an AI pre-commit hook, a lightweight Husky alternative, or a guardra
 
 - **AI pre-commit hook**: block bad staged changes before they enter git history.
 - **Repo-specific rules**: write plain-language prompts in YAML.
-- **Flexible providers**: use OpenAI-compatible APIs, `claude -p`, or `codex exec`.
+- **Flexible providers**: use OpenAI-compatible APIs, `claude -p`, `codex exec`, or generic headless CLIs.
 - **Minimal output**: pass/fail, prompt, reason, and file/line. No noisy review essay.
 - **Agent guardrails**: catch AI-generated code slop before commit.
 
@@ -107,6 +107,28 @@ provider:
   sandbox: read-only
 ```
 
+### Generic headless CLI
+
+Duck can call any authenticated one-shot CLI that accepts a prompt through stdin or an argument and returns Duck-compatible JSON directly, inside JSON final text, or as JSONL final text:
+
+```yaml
+provider:
+  type: headless-cli
+  name: factory-droid
+  command: droid
+  args:
+    - exec
+    - --output-format
+    - json
+    - --cwd
+    - "{cwd}"
+  promptMode: stdin
+```
+
+Use `{cwd}` in `args` for the current repository path and `{prompt}` when a CLI needs the prompt embedded in a specific argument position. Set `promptMode: argument` to append the prompt when no `{prompt}` placeholder is present.
+
+The bundled skill includes examples for Factory Droid (`droid exec`), Amp, OpenCode, Pi, OpenClaw, and Hermes Agent.
+
 ## Run manually
 
 ```bash
@@ -146,6 +168,8 @@ duck check --json
 ## Agent skill
 
 Duck ships a minimal skills.sh-compatible agent skill at `skills/duck/SKILL.md`. `duck init` and `duck install` copy it into `.skills/duck` so agents can discover how to configure Duck and reference example configs in `.skills/duck/scripts`.
+
+The bundled skill also includes `reference/` notes and `scripts/*.yaml` examples for additional headless agent CLIs such as Factory Droid (`droid exec`), Amp, OpenCode, Pi, OpenClaw, and Hermes Agent.
 
 You can also install only the skill from GitHub with:
 

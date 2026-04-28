@@ -48,4 +48,31 @@ rules:
     expect(config.provider.command).toBe("codex");
     expect(config.provider.sandbox).toBe("read-only");
   });
+
+  it("loads generic headless cli providers", () => {
+    const dir = mkdtempSync(join(tmpdir(), "duck-"));
+    const path = join(dir, "duck.yaml");
+    writeFileSync(
+      path,
+      `provider:
+  type: headless-cli
+  name: factory-droid
+  command: droid
+  args:
+    - exec
+    - --output-format
+    - json
+  promptMode: stdin
+rules:
+  - id: no-test
+    prompt: "Fail test changes."
+`,
+    );
+
+    const config = loadConfig(path);
+    expect(config.provider.type).toBe("headless-cli");
+    expect(config.provider.command).toBe("droid");
+    expect(config.provider.args).toEqual(["exec", "--output-format", "json"]);
+    expect(config.provider.promptMode).toBe("stdin");
+  });
 });

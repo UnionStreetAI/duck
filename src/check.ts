@@ -84,11 +84,22 @@ async function runProvider(
     return parseJsonResult(result.result);
   }
 
-  const args = ["exec", "--sandbox", config.provider.sandbox, "--cd", cwd];
-  if (config.provider.model) args.push("--model", config.provider.model);
-  args.push("-");
+  if (config.provider.type === "codex") {
+    const args = ["exec", "--sandbox", config.provider.sandbox, "--cd", cwd];
+    if (config.provider.model) args.push("--model", config.provider.model);
+    args.push("-");
 
-  return parseJsonResult(await execCli(config.provider.command, args, cwd, prompt));
+    return parseJsonResult(await execCli(config.provider.command, args, cwd, prompt));
+  }
+
+  const args = expandCliArgs(config.provider.args, cwd, prompt);
+  const hasPromptPlaceholder = config.provider.args.some(arg => arg.includes("{prompt}"));
+  const finalArgs =
+    config.provider.promptMode === "argument" && !hasPromptPlaceholder
+      ? [...args, prompt]
+      : args;
+  const stdin = config.provider.promptMode === "stdin" ? prompt : "";
+  return parseJsonResult(await execCli(config.provider.command, finalArgs, cwd, stdin));
 }
 
 async function runOpenAICompatibleProvider(
@@ -200,9 +211,42 @@ function buildSystemPrompt(): string {
 }
 
 function parseJsonResult(value: unknown): unknown {
-  if (typeof value !== "string") return value;
+  if (typeof value !== "string") {
+    const parsedReport = ReportSchema.safeParse(value);
+    if (parsedReport.success) return parsedReport.data;
+
+    if (value && typeof value === "object") {
+      const record = value as Record<string, unknown>;
+      for (const key of ["result", "finalText", "text", "content", "message", "output"]) {
+        if (typeof record[key] === "string") return parseJsonResult(record[key]);
+      }
+    }
+
+    return value;
+  }
 
   const trimmed = value.trim();
+  if (trimmed.includes("\n")) {
+    const parsedLines = trimmed
+      .split(/\r?\n/)
+      .map(line => {
+        try {
+          return JSON.parse(line) as unknown;
+        } catch {
+          return undefined;
+        }
+      })
+      .filter(value => value !== undefined);
+    for (const line of parsedLines.reverse()) {
+      const parsed = parseJsonResult(line);
+      if (ReportSchema.safeParse(parsed).success) return parsed;
+    }
+  }
+
   const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
   return JSON.parse(fenced?.[1] ?? trimmed);
+}
+
+function expandCliArgs(args: string[], cwd: string, prompt: string): string[] {
+  return args.map(arg => arg.replaceAll("{cwd}", cwd).replaceAll("{prompt}", prompt));
 }

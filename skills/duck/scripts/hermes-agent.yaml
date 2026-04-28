@@ -1,0 +1,13 @@
+provider:
+  type: headless-cli
+  name: hermes-agent
+  command: hermes
+  args:
+    - chat
+    - --query
+    - "{prompt}"
+  promptMode: argument
+
+rules:
+  - id: no-agent-slop
+    prompt: "Fail if staged changes include TODO placeholders, fake tests, invented APIs, or unrelated rewrites."
